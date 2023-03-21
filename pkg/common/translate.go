@@ -1,13 +1,14 @@
 package common
 
 import (
-        "fmt"
-        "io/ioutil"
-        "net/http"
-		"net/url"
-        "html"
-        "regexp"
-		"time"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"html"
+	"regexp"
+	"encoding/json"
+	"time"
 )
 
 const GOOGLE_TRANSLATE_URL = "http://translate.google.com/m?tl=zh-CN&sl=en&q="
@@ -22,17 +23,17 @@ func TranslateDescription(sourceContent string) string {
 	time.Sleep(200 * time.Microsecond)
 	response, err := http.Get(url)
 	if err != nil {
-			fmt.Println("请求错误", err.Error())
-			// 保守翻译，遇错返回原值
-			return sourceContent
+		// fmt.Println("请求错误", err.Error())
+		// 保守翻译，遇错返回原值
+		return sourceContent
 	}
 	// fmt.Println(response)
 
 	// 解析Body结构中的数据
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-			fmt.Println("Body 读取错误", err)
-			return sourceContent
+		// fmt.Println("Body 读取错误", err)
+		return sourceContent
 	}
 	// fmt.Println(string(data))
 
@@ -40,10 +41,15 @@ func TranslateDescription(sourceContent string) string {
 	expr := regexp.MustCompile(`(?s)class="(?:t0|result-container)">(.*?)<`)
 	result := expr.FindAllStringSubmatch(string(data), -1)
 	if len(result) == 0 {
-			return sourceContent
+		return sourceContent
 	}
 
 	targetContent := html.UnescapeString(result[0][1])
 	// fmt.Println(targetContent)
+	// 字符串json样本校验
+	exampleJson := `{"example": "` + targetContent + `"}`
+	if !json.Valid([]byte(exampleJson)){
+		return sourceContent
+	}
 	return targetContent
 }
