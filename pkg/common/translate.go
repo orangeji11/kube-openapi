@@ -14,7 +14,7 @@ import (
 var (
 	GOOGLE_TRANSLATE_URL = "http://translate.google.com/m?tl=zh-CN&sl=en&q="
 	TRANSLATE_PROXY      = "http://proxy01.uniontech.com:3128"
-	TRANSFILE            = "local/zh-ch.json"
+	TRANSFILE            = "locale/zh-ch.json"
 	TRANSMAP             = make(map[string]string)
 )
 
