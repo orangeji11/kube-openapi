@@ -609,6 +609,9 @@ func (g openAPITypeWriter) generateDescription(CommentLines []string) {
 	postDoc = strings.Replace(postDoc, "\n", "\\n", -1)
 	postDoc = strings.Replace(postDoc, "\t", "\\t", -1)
 	postDoc = strings.Trim(postDoc, " ")
+	// update the zh-ch.json file, uncomment it
+	// openapi.Generate(postDoc)
+	// update the zh-ch.json file, comment it
 	postDoc = openapi.TranslateDescription(postDoc)
 	if postDoc != "" {
 		g.Do("Description: \"$.$\",\n", postDoc)
