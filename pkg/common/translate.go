@@ -20,6 +20,12 @@ var (
 
 // generate new translation file
 func Generate(sourceContent string) {
+	
+	err := os.MkdirAll("locale", 0755)
+	if err != nil {
+		return
+	}
+	
 	// create zh-cn.json
 	file, err := os.OpenFile(TRANSFILE, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
 	if err != nil {
